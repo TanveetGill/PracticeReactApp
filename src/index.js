@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import YTSearch from 'youtube-api-search';
 
 import SearchBar from './components/search_bar'
+import VideoList from './components/video_list'
 
 const API_KEY = 'AIzaSyDxjbZwKUbMx_lqpBLMRp2ogspvH86uLek';
 
-// Creating a new componenet that procduces some HTML
-// Remember components are just code that produce some sort of HTML
-// After we create the component we want it to be seen in the DOM aka somehow RENDER it to the page
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-const App = () => {
-  return (
-    <div>
-      <SearchBar />
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { videos: [] };
+
+    YTSearch({key: API_KEY, term: 'Kanye West'}, (videos) => {
+      this.setState({ videos })
+      // In ES6 the above is equivalent of this.setState({ videos: videos }), ONLY when the KEY and VALUE have the same name
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <SearchBar />
+        <VideoList videos={this.state.videos} />
+      </div>
+    );
+  }
 }
 
 ReactDOM.render(<App />, document.getElementById('container'));
