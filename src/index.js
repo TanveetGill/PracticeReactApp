@@ -4,6 +4,7 @@ import YTSearch from 'youtube-api-search';
 
 import SearchBar from './components/search_bar'
 import VideoList from './components/video_list'
+import VideoDetail from './components/video_detail'
 
 const API_KEY = 'AIzaSyDxjbZwKUbMx_lqpBLMRp2ogspvH86uLek';
 
@@ -13,11 +14,16 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { videos: [] };
+    this.state = { 
+      videos: [],
+      selectedVideo: null
+    };
 
-    YTSearch({key: API_KEY, term: 'Kanye West'}, (videos) => {
-      this.setState({ videos })
-      // In ES6 the above is equivalent of this.setState({ videos: videos }), ONLY when the KEY and VALUE have the same name
+    YTSearch({key: API_KEY, term: 'Drake'}, (videos) => {
+      this.setState({ 
+        videos: videos,
+        selectedVideo: videos[0]
+      })
     });
   }
 
@@ -25,7 +31,10 @@ class App extends Component {
     return (
       <div>
         <SearchBar />
-        <VideoList videos={this.state.videos} />
+        <VideoDetail video={this.state.selectedVideo} />
+        <VideoList
+          onVideoSelect={ selectedVideo => this.setState({selectedVideo}) }
+          videos={this.state.videos} />
       </div>
     );
   }
